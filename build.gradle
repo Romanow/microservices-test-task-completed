@@ -1,0 +1,32 @@
+plugins {
+    id "java"
+    id "idea"
+    id "org.jetbrains.kotlin.jvm" version "1.7.10"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.7.10"
+    id "org.springframework.boot" version "2.7.0"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+[compileKotlin, compileTestKotlin]*.kotlinOptions*.jvmTarget = "11"
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}
+
+bootJar {
+    archiveFileName = "${project.name}.jar"
+}
