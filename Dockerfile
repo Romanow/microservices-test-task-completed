@@ -1,14 +1,8 @@
-FROM openjdk:11-jdk as builder
-WORKDIR application
-ARG JAR_FILE=build/libs/microservices-test-task.jar
-COPY ${JAR_FILE} application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
-
-FROM openjdk:11-jdk
+# syntax=docker/dockerfile:1
+FROM node:18-alpine
+RUN apk add --no-cache --virtual .gyp python3 make g++
+WORKDIR /app
+COPY . .
+RUN npm install --production
+CMD ["node", "app.js"]
 EXPOSE 8080
-WORKDIR application
-COPY --from=builder application/spring-boot-loader/ ./
-COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
